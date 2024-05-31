@@ -9,13 +9,12 @@ capture = cv2.VideoCapture(0)  # which webcam to use
 capture.set(3, wCam)
 capture.set(4, hCam)
 
-# Screen resolution
+# screen resolution
 screen_width, screen_height = pyautogui.size()
 
 x_pokazalec = y_pokazalec = 0
 x_palec = y_palec = 0
 x_sreden = y_sreden = 0
-x_pinky = y_pinky = 0
 
 prev_dist = 0
 
@@ -92,8 +91,6 @@ while True:
 
             mpDraw.draw_landmarks(img, hand_landmarks, mpHands.HAND_CONNECTIONS)
 
-            # Check if hand is open
-            # hand_open = is_hand_open(hand_landmarks.landmark, width, height)
             base_x, base_y = int(hand_landmarks.landmark[0].x * width), int(hand_landmarks.landmark[0].y * height)
 
             for id, landmark in enumerate(hand_landmarks.landmark):
