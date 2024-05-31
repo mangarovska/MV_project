@@ -70,7 +70,6 @@ def is_finger_down(landmark, base_x, base_y, width, height):
 def calculate_distance(x1, y1, x2, y2):
     return ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
 
-
 # Mouse Moving Mode - 2 fingers up
 # Mouse Single Left Click Mode - index down
 # Mouse Single Right Click Mode - middle down
@@ -124,14 +123,12 @@ while True:
                     x_middle = center_x
                     y_middle = center_y
 
-            # Check finger states
+            # check finger states
             index_finger_down = is_finger_down(hand_landmarks.landmark[8], x_palec, y_palec, width, height)
             middle_finger_down = is_finger_down(hand_landmarks.landmark[12], x_palec, y_palec, width, height)
-            pinky_finger_down = is_finger_down(hand_landmarks.landmark[20], x_palec, y_palec, width, height)
             hand_open = is_hand_open(hand_landmarks.landmark, width, height)
-            # hand_fist = is_fist(hand_landmarks.landmark, width, height)
 
-            # Map webcam coordinates to screen coordinates and mirror along x-axis
+            # map webcam coordinates to screen coordinates and mirror along x-axis
             screen_x = screen_width - int(x_pokazalec * screen_width / wCam)
             screen_y = int(y_pokazalec * screen_height / hCam)
 
@@ -140,23 +137,23 @@ while True:
             if not hand_open:
 
                 if not index_finger_down and not middle_finger_down:
-                    # Both fingers are up, move the mouse
+                    # both fingers up - move the mouse
                     pyautogui.moveTo(screen_x, screen_y)
                     gesture_text = "Move Mouse"
                 elif index_finger_down and not middle_finger_down and (current_time - last_click) > COOLDOWN_PERIOD:
-                    # Only index finger is down, single left click
+                    # only index finger down - single left click
                     pyautogui.click(button='left')
                     print("Single Left click")
                     gesture_text = "Left Click"
                     last_click = current_time
                 elif not index_finger_down and middle_finger_down and (current_time - last_click) > COOLDOWN_PERIOD:
-                    # Only middle finger is down, single right click
+                    # only middle finger down - single right click
                     pyautogui.click(button='right')
                     print("Single Right click")
                     gesture_text = "Right Click"
                     last_click = current_time
                 elif index_finger_down and middle_finger_down and (current_time - last_click) > COOLDOWN_PERIOD:
-                    # Both fingers are down, double click
+                    # both fingers down - double click
                     pyautogui.doubleClick(button='left')
                     print("Double click")
                     gesture_text = "Double Click"
@@ -179,7 +176,7 @@ while True:
             mpDraw.draw_landmarks(img, hand_landmarks1, mpHands.HAND_CONNECTIONS)
             mpDraw.draw_landmarks(img, hand_landmarks2, mpHands.HAND_CONNECTIONS)
 
-            # so palec
+            # with thumb
             p_x1, p_y1 = int(hand_landmarks1.landmark[4].x * width), int(hand_landmarks1.landmark[4].y * height)
             p_x2, p_y2 = int(hand_landmarks2.landmark[4].x * width), int(hand_landmarks2.landmark[4].y * height)
 
@@ -190,10 +187,10 @@ while True:
             cv2.line(img, (p_x1, p_y1), (p_x2, p_y2), (0, 255, 0), 3)
 
             if prev_dist != 0:
-                # Calculate the difference in distance
+                # calculate the difference in distance
                 dist_change = dist - prev_dist
 
-                # Adjust volume based on distance change
+                # adjust volume based on distance change
                 if dist_change > 0:
                     for _ in range(int(dist_change // 10)):  # Scale the change
                         pyautogui.press("volumeup")
